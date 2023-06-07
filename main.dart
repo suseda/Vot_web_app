@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'search_friends_menu.dart';
+import 'profile_page.dart';
+import 'chat_list.dart';
 
 void main() {
   runApp(ChatApp());
@@ -10,8 +12,9 @@ class ChatApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Chat App',
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        primarySwatch: Colors.amber,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       home: ChatScreen(),
@@ -25,82 +28,59 @@ class ChatScreen extends StatefulWidget {
 }
 
 class _ChatScreenState extends State<ChatScreen> {
-  List<String> messages = [];
-  TextEditingController _textController = TextEditingController();
-
-  void _sendMessage(String message) {
-    setState(() {
-      messages.add(message);
-      _textController.clear();
-    });
-  }
+  int currentPageIndex = 0;
+  final screens = [
+    ChatListScreen(),
+    FriendsMenu(),
+    ProfilePage(),
+  ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      body: screens[currentPageIndex],
       appBar: AppBar(
         title: Text('Chat App'),
+        foregroundColor: Colors.black,
+        actions: <Widget>[
+        Padding(
+          padding: EdgeInsets.only(right: 20.0),
+          child: GestureDetector(
+            onTap: () {
+              print('Phone ring...');
+            },
+            child: Icon(
+              Icons.phone_in_talk_sharp,
+              size: 26.0,
+            ),
+          )
+        ),
+        Padding(
+          padding: EdgeInsets.only(right: 20.0),
+          child: GestureDetector(
+            onTap: () {
+              print('Video chat...');
+            },
+            child: Icon(
+                Icons.video_camera_front
+            ),
+          )
+        ),
+  ],
       ),
-      body: Column(
-        children: [
-          Expanded(
-            child: ListView.builder(
-              itemCount: messages.length,
-              itemBuilder: (BuildContext context, int index) {
-                return ListTile(
-                  title: Text(messages[index]),
-                );
-              },
-            ),
-          ),
-          Container(
-            margin: EdgeInsets.all(8.0),
-            child: IconButton(
-              icon: Icon(Icons.group_add_outlined),
-              onPressed: () => Navigator.push( context,
-              MaterialPageRoute(builder: (context) => FriendsMenu()),
-            ),
-              )
-          ),
-          Container(
-            margin: EdgeInsets.all(8.0),
-            child: Row(
-              children: [
-                Expanded(
-                  child: TextField(
-                    controller: _textController,
-                    decoration: InputDecoration(
-                      hintText: 'Type a message...',
-                    ),
-                  ),
-                ),
-                IconButton(
-                  icon: Icon(Icons.send),
-                  onPressed: () => _sendMessage('User A: ${_textController.text}'),
-                ),
-              ],
-            ),
-          ),
-          Container(
-            margin: EdgeInsets.all(8.0),
-            child: Row(
-              children: [
-                Expanded(
-                  child: TextField(
-                    controller: _textController,
-                    decoration: InputDecoration(
-                      hintText: 'Type a message...',
-                    ),
-                  ),
-                ),
-                IconButton(
-                  icon: Icon(Icons.send),
-                  onPressed: () => _sendMessage('User B: ${_textController.text}'),
-                ),
-              ],
-            ),
-          ),
+      bottomNavigationBar: NavigationBar(
+        backgroundColor: Colors.amber,
+        destinations: [
+          NavigationDestination(icon: Icon(Icons.chat_sharp), label: 'Chats'),
+          NavigationDestination(icon: Icon(Icons.people_alt_rounded), label: 'Friends'),
+          NavigationDestination(icon: Icon(Icons.person), label: 'Profile')
         ],
+        selectedIndex: currentPageIndex,
+        onDestinationSelected: (int index) => {
+          setState((){
+              currentPageIndex = index;
+          })
+        } ,
       ),
     );
   }
