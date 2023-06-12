@@ -23,7 +23,7 @@ Web платформа, в която могат да се изпращат съ
 За да работи приложението трябва да се направят няколко конфигурации на някои от файловете. pubspec.yaml е променен както и папката web и android за разлика от тези зададени по подразбиране. В папката lib е целия код на проекта. 
 
 ## Технологии
--Frontend: Flutter, Dart <br> 
+Frontend: Flutter, Dart <br> 
 Backend: Firebase <br>
 линк към [Firebase](https://console.firebase.google.com/project/chatweb-1a6a5/firestore/data/~2Fusers~2FFsZOs6zQ4f7bP1yR0ERV)
 
